@@ -1,0 +1,42 @@
+#version 330 core
+out vec4 FragColor;
+
+in vec2 TexCoord;
+uniform sampler2D gPosition;
+uniform sampler2D gNormal;
+uniform sampler2D gColor;
+
+struct Light{
+    vec3 position;
+    vec3 color;
+    float radius;
+};
+#define NR_LIGHTS 15
+uniform Light lights[NR_LIGHTS];
+uniform vec3 viewPos;
+
+void main(){
+    vec3 FragPos = texture(gPosition, TexCoord).rgb;
+    vec3 Normal = texture(gNormal, TexCoord).rgb;
+    vec4 Color = texture(gColor, TexCoord);
+
+    FragColor = vec4(Normal, 1.0);
+
+    if(Color.a == 0.0){
+        discard;
+    }
+    vec3 lighting = Color.rbg * 0.1;
+    vec3 viewDir = normalize(viewPos - FragPos);
+    for(int i = 0; i < NR_LIGHTS; ++i){
+        float distance = length(lights[i].position - FragPos);
+        if(distance < lights[i].radius){
+            if(distance < 2.5){
+                lighting += Color.rgb * lights[i].color*(2.5-distance);
+            }
+            vec3 lightDir = normalize(lights[i].position - FragPos);
+            lighting += max(dot(Normal, lightDir), 0.0) * Color.rgb * lights[i].color;
+        }
+    }
+
+    FragColor = vec4(lighting, 1.0);
+}
