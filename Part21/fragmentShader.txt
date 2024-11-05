@@ -1,0 +1,38 @@
+#version 330 core
+out vec4 FragColor;
+
+in vec2 TexCoord;
+
+uniform sampler2D gPosition;
+uniform sampler2D gNormal;
+uniform sampler2D gColor;
+uniform sampler2D ssao;
+
+uniform bool showColor;
+
+uniform vec3 lightDir;
+
+void main(){
+    float ao = texture(ssao, TexCoord).r;
+    if(!showColor){
+        FragColor = vec4(ao,ao,ao,1.0);
+    }
+    else{
+        vec3 FragPos = texture(gPosition, TexCoord).rgb;
+        vec3 Normal = texture(gNormal, TexCoord).rgb;
+        vec3 color = texture(gColor, TexCoord).rgb;
+
+        //view space lighting
+        vec3 viewDir = normalize(-FragPos);
+
+        vec3 ambient = color * 0.3;
+
+        vec3 diffuse = max(dot(lightDir, Normal), 0.0) * color;
+
+        vec3 halfwayDir = normalize(lightDir + viewDir);  
+        float spec = pow(max(dot(Normal, halfwayDir), 0.0), 8.0);
+        vec3 specular = vec3(0.1) * spec;
+
+        FragColor = vec4((ambient+diffuse+specular)*ao, 1.0);
+    }
+}
