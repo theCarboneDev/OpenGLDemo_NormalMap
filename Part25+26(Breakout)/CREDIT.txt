@@ -1,0 +1,15 @@
+Many of these files come from Joey de Vries' LearnOpenGL tutorial on Breakout. 
+If you want to find his full reposity click here: https://github.com/JoeyDeVries/LearnOpenGL/tree/master/src/7.in_practice/3.2d_game/0.full_source
+If you want to follow Joey's tutorials: https://learnopengl.com/In-Practice/2D-Game/Breakout
+
+The files with this are from his tutorials:
+/*******************************************************************
+** This code is part of Breakout.
+**
+** Breakout is free software: you can redistribute it and/or modify
+** it under the terms of the CC BY 4.0 license as published by
+** Creative Commons, either version 4 of the License, or (at your
+** option) any later version.
+******************************************************************/
+
+Everything else is mine. Enjoy!
